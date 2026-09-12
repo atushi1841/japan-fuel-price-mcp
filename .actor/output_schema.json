@@ -1,26 +1,17 @@
 {
-  "actorSpecification": 1,
-  "outputSchema": {
-    "version": 1,
-    "type": "object",
-    "title": "Japan Fuel Price MCP output",
-    "description": "MCP server responses carry structuredContent per tool call: weekly METI fuel price records keyed by region and product.",
-    "properties": {
-      "latest_price": {
-        "type": "object",
-        "title": "Latest weekly fuel price snapshot",
-        "description": "Latest METI weekly average retail fuel price for the requested region and product.",
-        "properties": {
-          "region": { "type": "string", "title": "Region", "description": "Prefecture or nationwide" },
-          "product": { "type": "string", "title": "Product", "description": "premium | regular | diesel | kerosene_store | kerosene_delivery" },
-          "unit": { "type": "string", "title": "Unit", "description": "JPY/liter or JPY/18L" },
-          "price": { "type": "number", "title": "Price", "description": "Tax-inclusive weekly average cash price" },
-          "survey_date": { "type": "string", "title": "Survey date", "description": "Survey week date (YYYY-MM-DD)" },
-          "week_over_week": { "type": "number", "title": "WoW change", "description": "Change vs previous survey week" }
-        },
-        "required": []
-      }
+  "actorOutputSchemaVersion": 1,
+  "title": "Output schema of the Japan Fuel Price MCP server",
+  "description": "MCP server (Standby mode): tool responses are returned over the MCP streamable-HTTP protocol as structuredContent (region, product, unit JPY/liter or JPY/18L, price, survey_date, week_over_week). This schema exposes the live server container as the run output.",
+  "properties": {
+    "mcp_endpoint": {
+      "title": "MCP server endpoint",
+      "description": "Streamable-HTTP MCP endpoint of this run's Standby container (append /mcp, Bearer Apify token required).",
+      "template": "{{run.containerUrl}}"
     },
-    "required": []
+    "run_output": {
+      "title": "Run details",
+      "description": "Console view of this run (MCP servers return results inline over the protocol, not via dataset).",
+      "template": "{{links.publicRunUrl}}"
+    }
   }
 }

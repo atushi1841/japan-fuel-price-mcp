@@ -8,6 +8,7 @@
   "buildTag": "latest",
   "usesStandbyMode": true,
   "webServerMcpPath": "/mcp",
+  "output": "./output_schema.json",
   "meta": {
     "templateId": "python-mcp-apify-actors"
   },
