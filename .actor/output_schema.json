@@ -4,11 +4,13 @@
   "description": "MCP server (Standby mode): tool responses are returned over the MCP streamable-HTTP protocol as structuredContent (region, product, unit JPY/liter or JPY/18L, price, survey_date, week_over_week). This schema exposes the live server container as the run output.",
   "properties": {
     "mcp_endpoint": {
+      "type": "string",
       "title": "MCP server endpoint",
       "description": "Streamable-HTTP MCP endpoint of this run's Standby container (append /mcp, Bearer Apify token required).",
       "template": "{{run.containerUrl}}"
     },
     "run_output": {
+      "type": "string",
       "title": "Run details",
       "description": "Console view of this run (MCP servers return results inline over the protocol, not via dataset).",
       "template": "{{links.publicRunUrl}}"
