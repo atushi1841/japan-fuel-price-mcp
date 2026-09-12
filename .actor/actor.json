@@ -1,0 +1,27 @@
+{
+  "$schema": "https://apify.com/schemas/v1/actor.ide.json",
+  "actorSpecification": 1,
+  "name": "japan-fuel-price-mcp",
+  "title": "Japan Fuel Price MCP — METI Weekly Gasoline/Diesel/Kerosene",
+  "description": "MCPサーバー — 資源エネルギー庁公式XLSX（給油所小売価格調査・毎週更新）から、日本の47都道府県+全国のガソリン(ハイオク/レギュラー)・軽油・灯油の週次小売価格をAIエージェント（Claude, ChatGPT等）からMCPツールとして呼び出せます。最新価格・履歴・最安県ランキング・全国トレンド（インフレ指標）。",
+  "version": "0.1",
+  "buildTag": "latest",
+  "usesStandbyMode": true,
+  "webServerMcpPath": "/mcp",
+  "meta": {
+    "templateId": "python-mcp-apify-actors"
+  },
+  "input": {
+    "title": "Actor input schema",
+    "description": "MCPサーバーはStandbyモードで動作 — 入力はMCPツール呼び出し経由で行われ、Actor入力からは受け取りません。",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {},
+    "required": []
+  },
+  "dockerfile": "../Dockerfile",
+  "categories": [
+    "MCP_SERVERS",
+    "DATA_EXTRACTION"
+  ]
+}

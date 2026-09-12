@@ -1,0 +1,28 @@
+{
+  "events": [
+    {
+      "eventTitle": "fuel-price-latest",
+      "eventDescription": "Latest weekly fuel price for a prefecture or nationwide",
+      "eventPriceUsd": 0.001,
+      "isPrimaryEvent": true
+    },
+    {
+      "eventTitle": "fuel-price-history",
+      "eventDescription": "Weekly fuel price history series",
+      "eventPriceUsd": 0.001,
+      "isPrimaryEvent": true
+    },
+    {
+      "eventTitle": "fuel-price-cheapest",
+      "eventDescription": "Cheapest/most-expensive prefecture ranking",
+      "eventPriceUsd": 0.001,
+      "isPrimaryEvent": true
+    },
+    {
+      "eventTitle": "fuel-price-trend",
+      "eventDescription": "Nationwide multi-product trend (inflation indicator)",
+      "eventPriceUsd": 0.001,
+      "isPrimaryEvent": true
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+.aider*
+node_modules/
+.venv/
+storage/
+.mypy_cache/
+.pytest_cache/
+tmp/
+tests/_tmp_cache/

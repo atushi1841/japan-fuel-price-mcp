@@ -1,0 +1,10 @@
+# Apify SDK + FastMCP
+apify >= 3.0.0, < 4.0.0
+fastmcp >= 3.0.0, < 4.0.0
+mcp >= 1.25.0, < 2.0.0
+
+# HTTP server
+uvicorn >= 0.30.0
+
+# XLSX parsing (METI official files)
+openpyxl >= 3.1.0
