@@ -3,7 +3,7 @@ MCPサーバーエントリポイント — Apify Standby モード対応。
 
 1. Actor.init() を呼び出してApifyプラットフォームに登録
 2. uvicorn HTTPサーバーを起動（Apifyが期待するポート）
-3. FastMCPアプリ（server.py）をHTTPサーバーに配線
+3. FastMCPアプリ（server.py）をHTTPサーバーに配線 + /rest/* ラッパーを合成
 4. SIGINT でgraceful shutdown
 """
 
@@ -23,6 +23,7 @@ if os.environ.get("APIFY_CONTAINER_PORT"):
 else:
     from src.apify_shim import Actor
 
+from src.rest import rest_routes
 from src.server import get_server
 
 
@@ -33,6 +34,9 @@ async def main() -> None:
 
     server = get_server()
     app = server.http_app(transport="streamable-http")
+    # RapidAPI等のOpenAPIゲートウェイ向けに /rest/* と /openapi.json を同じアプリに合成。
+    # /mcp（Standby MCP）はそのまま動作する。認証はApify Standby側が全ルートに適用。
+    app.router.routes.extend(rest_routes())
 
     try:
         Actor.log.info(f"MCPサーバーを起動します (port {port})")
