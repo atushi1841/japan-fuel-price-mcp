@@ -9,3 +9,7 @@ storage/
 .pytest_cache/
 tmp/
 tests/_tmp_cache/
+
+# MCPBバンドル（ビルド成果物: scripts/pack_mcpb.py が生成）
+server.mcpb
+*.mcpb

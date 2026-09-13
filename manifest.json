@@ -1,0 +1,150 @@
+{
+  "manifest_version": "0.4",
+  "name": "japan-fuel-price-mcp",
+  "display_name": "Japan Fuel Price MCP — 日本の燃料価格（資源エネルギー庁 公式統計）",
+  "version": "0.1.0",
+  "description": "日本のガソリン・軽油・灯油の週次小売価格を、資源エネルギー庁（METI）公式統計XLSXから取得してAIエージェントに提供します。全国＋47都道府県の最新価格・履歴・最安県ランキング・インフレ指標。",
+  "long_description": "資源エネルギー庁「給油所小売価格調査」の公式XLSX（毎週更新・1990年〜）を解析し、AIエージェントから直接照会できるMCPツール群を提供します。\n\n## 提供ツール\n\n| ツール | 内容 |\n|---|---|\n| `get_latest_fuel_price` | 指定都道府県（または全国）の最新週平均価格＋前週比＋ガソリン税内訳 |\n| `get_fuel_price_history` | 週次履歴（都道府県は直近260週／全国は1990年〜）＋min/max/avg |\n| `cheapest_prefectures` | 47都道府県の最安〜最高値ランキング |\n| `national_fuel_trend` | 全国平均の複数製品トレンド（インフレ・マクロ指標） |\n| `list_fuel_regions` | 照会可能な地域名（漢字・ローマ字）・製品・単位の一覧 |\n\n## 動作要件\n\n- 完全ローカル実行（APIキー不要）。初回呼び出しでMETI公式XLSXを取得し、以後6時間はキャッシュから即答\n- 依存解決に [uv](https://docs.astral.sh/uv/) を使用（`uv run` 経由で起動、Python 3.10以上）\n- METI側の障害・レート制限時は同梱シードキャッシュにフォールバック（ツールが失敗しない）\n- 単位: ガソリン・軽油 = 円/L、灯油 = 円/18L（消費税込み現金価格）\n- 出典明示で商用利用可（政府標準利用規約2.0）\n\nこのバンドルには約2MBのシードキャッシュ（`data/fuel_prices.json`）を同梱しています。",
+  "author": {
+    "name": "atushi1841",
+    "url": "https://github.com/atushi1841"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atushi1841/japan-fuel-price-mcp"
+  },
+  "homepage": "https://apify.com/fruitful_quintessence/japan-fuel-price-mcp",
+  "server": {
+    "type": "python",
+    "entry_point": "src/stdio_main.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "${__dirname}",
+        "src/stdio_main.py"
+      ]
+    }
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin",
+      "linux",
+      "win32"
+    ],
+    "runtimes": {
+      "python": ">=3.10"
+    }
+  },
+  "tools": [
+    {
+      "name": "get_latest_fuel_price",
+      "description": "Get the latest weekly average retail fuel price for a Japanese prefecture or nationwide.\n\nOfficial METI (Agency for Natural Resources and Energy) gasoline station survey, updated weekly. Prices are tax-inclusive cash prices: gasoline/diesel in JPY per liter, kerosene in JPY per 18L. Includes week-over-week change and the gasoline-tax component.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "prefecture": {
+            "default": "全国",
+            "type": "string",
+            "description": "prefecture name in kanji, romaji, or with 都/府/県 suffix (e.g. 東京, tokyo, 東京都, 全国/nationwide)"
+          },
+          "product": {
+            "default": "regular",
+            "type": "string",
+            "description": "premium | regular | diesel | kerosene_store | kerosene_delivery"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "name": "get_fuel_price_history",
+      "description": "Get weekly retail fuel price history for a Japanese prefecture or nationwide.\n\nUp to 260 recent weeks of prefecture-level data (official METI weekly survey). Useful for inflation tracking, cost analysis and trend charts. Returns date/price series plus min/max/avg.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "prefecture": {
+            "default": "全国",
+            "type": "string",
+            "description": "prefecture name (kanji or romaji), or 全国/nationwide"
+          },
+          "product": {
+            "default": "regular",
+            "type": "string",
+            "description": "premium | regular | diesel | kerosene_store | kerosene_delivery"
+          },
+          "weeks": {
+            "default": 12,
+            "type": "integer",
+            "description": "number of recent weeks (default 12, max 260)"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "name": "cheapest_prefectures",
+      "description": "Rank Japan's 47 prefectures by latest weekly average fuel price (cheapest first, plus most expensive).\n\nOfficial METI prefecture averages — the closest public proxy for \"where is fuel cheapest in Japan\". Great for travel cost planning and regional price-gap analysis.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "product": {
+            "default": "regular",
+            "type": "string",
+            "description": "premium | regular | diesel | kerosene_store | kerosene_delivery"
+          },
+          "limit": {
+            "default": 10,
+            "type": "integer",
+            "description": "how many entries for each end of the ranking (default 10, max 47)"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "name": "national_fuel_trend",
+      "description": "Get nationwide weekly fuel price trend across multiple products — an inflation/macro indicator for Japan.\n\nReturns the series plus latest price, absolute change and % change over the window for each requested product.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {
+          "products": {
+            "default": "premium,regular,diesel",
+            "type": "string",
+            "description": "comma-separated: premium,regular,diesel,kerosene_store,kerosene_delivery"
+          },
+          "weeks": {
+            "default": 52,
+            "type": "integer",
+            "description": "lookback window in weeks (default 52, max 260)"
+          }
+        },
+        "type": "object"
+      }
+    },
+    {
+      "name": "list_fuel_regions",
+      "description": "List all queryable regions (47 prefectures + regional bureaus + nationwide) with romaji aliases, and the 5 fuel products with their units.\n\nCall this first if unsure which region/product names are valid.\n\nReturns:\n    Regions with kanji + romaji names, product keys with labels and units, latest survey date.",
+      "inputSchema": {
+        "additionalProperties": false,
+        "properties": {},
+        "type": "object"
+      }
+    }
+  ],
+  "keywords": [
+    "japan",
+    "fuel",
+    "fuel price",
+    "gasoline",
+    "petrol",
+    "diesel",
+    "kerosene",
+    "meti",
+    "enecho",
+    "statistics",
+    "inflation",
+    "prefecture"
+  ]
+}

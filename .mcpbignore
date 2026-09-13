@@ -1,0 +1,22 @@
+# MCPBバンドルに含めないもの（uv runtime は pyproject.toml から依存を解決する）
+.git/
+.github/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.aider*
+node_modules/
+storage/
+tmp/
+tests/
+.actor/
+Dockerfile
+pay_per_event.json
+requirements.txt
+scripts/
+src/main.py
+src/rest.py
+*.mcpb
+manifest_spec.md

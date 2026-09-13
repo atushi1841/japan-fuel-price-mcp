@@ -46,7 +46,12 @@ def get_server() -> FastMCP:
     FastMCP サーバーインスタンスを作成。
     この関数が main.py やテストから呼ばれる唯一のコントラクト。
     """
-    server = FastMCP("japan-fuel-price-mcp", "0.1.0")
+    # FastMCP 3.x の第2引数は instructions。バージョンは version= で明示しないと
+    # サーバー情報にライブラリのバージョン(例 3.4.7)が載ってしまう（MCPB/Smithery表示に影響）。
+    try:
+        server = FastMCP("japan-fuel-price-mcp", version="0.1.0")
+    except TypeError:  # version kwarg を持たない古いFastMCP
+        server = FastMCP("japan-fuel-price-mcp")
 
     # ──────────────────────────────────────────────
     # Tool 1: 最新価格

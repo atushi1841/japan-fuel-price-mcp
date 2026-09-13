@@ -1,0 +1,19 @@
+[project]
+name = "japan-fuel-price-mcp"
+version = "0.1.0"
+description = "MCP server: Japanese weekly retail fuel prices (gasoline/diesel/kerosene) from METI official statistics"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp>=3.0.0,<4.0.0",
+    "mcp>=1.25.0,<2.0.0",
+    # METI公式XLSX（YYMMDDs5.xlsx）のパース
+    "openpyxl>=3.1.0",
+    # src/main.py（Apify StandbyのHTTP起動）がuvicornを直接使う
+    "uvicorn>=0.30.0",
+]
+
+# MCPB (uv runtime) はローカル配布用。Apify Standby 実行時は requirements.txt を使う
+# （apify SDK + uvicorn は HTTP ホスティング専用で、stdio 実行には不要）。
+[tool.uv]
+package = false
