@@ -43,6 +43,15 @@ def _get_int(params: dict[str, str], key: str, default: int) -> int:
         raise ValueError(f"parameter '{key}' must be an integer, got {raw!r}") from None
 
 
+def _region_param(params: dict[str, str]) -> str:
+    """都道府県パラメータを解決する。
+
+    `prefecture` が正だが、利用側（RapidAPIのコンシューマ等）が `region` と書く
+    ケースが多いため別名として受ける。両方あれば `prefecture` を優先。未指定は全国。
+    """
+    return params.get("prefecture") or params.get("region") or "全国"
+
+
 # ──────────────────────────────────────────────
 # GET /rest/latest
 # ──────────────────────────────────────────────
@@ -50,7 +59,7 @@ def _get_int(params: dict[str, str], key: str, default: int) -> int:
 def latest_handler(request) -> JSONResponse:
     q = dict(request.query_params)
     try:
-        result = fuel_price.latest_price(q.get("prefecture") or "全国",
+        result = fuel_price.latest_price(_region_param(q),
                                          q.get("product") or "regular")
     except ValueError as e:
         return _err(400, str(e))
@@ -67,7 +76,7 @@ def latest_handler(request) -> JSONResponse:
 def history_handler(request) -> JSONResponse:
     q = dict(request.query_params)
     try:
-        result = fuel_price.price_history(q.get("prefecture") or "全国",
+        result = fuel_price.price_history(_region_param(q),
                                           q.get("product") or "regular",
                                           _get_int(q, "weeks", 12))
     except ValueError as e:
@@ -161,6 +170,10 @@ OPENAPI_DOC: dict[str, Any] = {
                      "description": "Kanji, romaji, or with 都/府/県 suffix (e.g. 東京, tokyo, 全国/nationwide)",
                      "schema": {"type": "string", "default": "全国"},
                      "example": "tokyo"},
+                    {"name": "region", "in": "query", "required": False,
+                     "description": "Alias of `prefecture` (accepted for compatibility; `prefecture` wins if both are sent)",
+                     "schema": {"type": "string"},
+                     "example": "tokyo"},
                     {"name": "product", "in": "query", "required": False,
                      "description": f"One of: {_PRODUCTS}",
                      "schema": {"type": "string", "default": "regular",
@@ -179,6 +192,10 @@ OPENAPI_DOC: dict[str, Any] = {
                     {"name": "prefecture", "in": "query", "required": False,
                      "description": "Region name (kanji/romaji) or 全国/nationwide",
                      "schema": {"type": "string", "default": "全国"},
+                     "example": "osaka"},
+                    {"name": "region", "in": "query", "required": False,
+                     "description": "Alias of `prefecture` (accepted for compatibility; `prefecture` wins if both are sent)",
+                     "schema": {"type": "string"},
                      "example": "osaka"},
                     {"name": "product", "in": "query", "required": False,
                      "description": f"One of: {_PRODUCTS}",

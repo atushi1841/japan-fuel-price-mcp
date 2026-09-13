@@ -74,6 +74,30 @@ def test_rest_latest_params(client):
     assert r.status_code == 200 and r.json()["region"] == "tokyo"
 
 
+def test_rest_latest_region_alias(client):
+    """region は prefecture の別名として効く（RapidAPIコンシューマが region と書くケース）。"""
+    r = client.get("/rest/latest", params={"region": "tokyo"})
+    assert r.status_code == 200 and r.json()["region"] == "tokyo"
+
+
+def test_rest_latest_prefecture_wins_over_region(client):
+    r = client.get("/rest/latest", params={"prefecture": "osaka", "region": "tokyo"})
+    assert r.status_code == 200 and r.json()["region"] == "osaka"
+
+
+def test_rest_history_region_alias(client):
+    r = client.get("/rest/history", params={"region": "tokyo", "weeks": "4"})
+    assert r.status_code == 200
+    assert r.json()["region"] == "tokyo" and r.json()["weeks_returned"] == 4
+
+
+def test_openapi_documents_region_alias(client):
+    doc = client.get("/openapi.json").json()
+    for path in ("/rest/latest", "/rest/history"):
+        names = {p["name"] for p in doc["paths"][path]["get"]["parameters"]}
+        assert {"prefecture", "region"} <= names, path
+
+
 def test_rest_latest_bad_product_400(client):
     r = client.get("/rest/latest", params={"product": "vodka"})
     assert r.status_code == 400 and "error" in r.json()
