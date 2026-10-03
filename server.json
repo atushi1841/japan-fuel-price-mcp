@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.atushi1841/japan-fuel-price-mcp",
+  "description": "Japan fuel prices by prefecture (METI weekly data). Tools: current, history, cheapest.",
+  "version": "0.1.0",
+  "repository": {
+    "url": "https://github.com/atushi1841/japan-fuel-price-mcp",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "mcpb",
+      "identifier": "https://github.com/atushi1841/japan-fuel-price-mcp/releases/download/v0.1.0/server.mcpb",
+      "version": "0.1.0",
+      "fileSha256": "b3c4cec804b805d8f01f6129f4e0fcb5d315dba478702e08cf2e86b251616afc",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
