@@ -61,3 +61,17 @@ curl -X POST "https://api.apify.com/v2/acts/<ACTOR_ID>/builds?version=0.1&tag=la
 ## 出典表記
 
 > Source: Agency for Natural Resources and Energy (METI), Petroleum Products Price Survey. Government Standard Terms of Use 2.0.
+
+## Install via Smithery
+
+Connect this MCP server to your AI client (Claude Desktop, Cursor, VS Code) in one command:
+
+```bash
+npx @smithery/cli install atushi1841/japan-fuel-price-mcp --client claude
+```
+
+Replace `claude` with `cursor`, `vscode`, or `cline` for other clients.
+
+Alternatively, install directly from the [Smithery registry](https://smithery.ai/server/atushi1841/japan-fuel-price-mcp).
+
+> **Note:** Smithery server listing is pending verification. Once verified, this server will appear in search results with useCount tracking.
