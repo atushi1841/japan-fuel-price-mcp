@@ -1,5 +1,7 @@
 # Japan Fuel Price MCP — METI Weekly Gasoline / Diesel / Kerosene
 
+[![Apify Store](https://img.shields.io/badge/Apify-Store-blue)](https://apify.com/fruitful_quintessence/japan-fuel-price-mcp)
+
 MCPサーバー: 日本のガソリン・軽油・灯油の週次小売価格を、資源エネルギー庁（METI）公式統計XLSXからAIエージェントに提供します。
 
 - データソース: [資源エネルギー庁 給油所小売価格調査](https://www.enecho.meti.go.jp/statistics/petroleum_and_lpgas/pl007/) 公式XLSX（毎週更新、1990年〜の全国・都道府県別平均現金価格）
