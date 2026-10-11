@@ -1,0 +1,15 @@
+# Smithery.ai configuration for japan-fuel-price-mcp MCP
+description: "Japan weekly gasoline/diesel/kerosene retail prices from METI. Tools: current, history, cheapest."
+repositoryUrl: https://github.com/atushi1841/japan-fuel-price-mcp
+iconUrl: https://raw.githubusercontent.com/atushi1841/japan-fuel-price-mcp/main/icon.png
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties: {}
+  commandFunction: |
+    (config) => ({
+      command: 'python',
+      args: ['${__dirname}/src/main.py']
+    })
+exampleConfig: {}
